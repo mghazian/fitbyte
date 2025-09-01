@@ -11,20 +11,23 @@ CREATE TABLE IF NOT EXISTS users (
 	imageUri VARCHAR NULL,
 	
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	deleted_at TIMESTAMP NULL
 );
 
 CREATE INDEX ON users (email, "password");
 
 CREATE TABLE IF NOT EXISTS activity_types (
-	id VARCHAR PRIMARY KEY,
+	id BIGSERIAL PRIMARY KEY,
+	"name" VARCHAR NOT NULL,
 	calories_per_minute INT NOT NULL,
 	
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	deleted_at TIMESTAMP NULL
 );
 
-INSERT INTO activity_types (id, calories_per_minute) VALUES
+INSERT INTO activity_types ("name", calories_per_minute) VALUES
 ('Walking', 4),
 ('Yoga', 4),
 ('Stretching', 4),
@@ -38,12 +41,13 @@ INSERT INTO activity_types (id, calories_per_minute) VALUES
 
 CREATE TABLE IF NOT EXISTS activities (
 	id BIGSERIAL PRIMARY KEY,
-	activity_type_id VARCHAR REFERENCES activity_types(id) ON UPDATE CASCADE ON DELETE SET NULL,
+	activity_type_id BIGINT REFERENCES activity_types(id) ON UPDATE CASCADE ON DELETE SET NULL,
 	doneAt TIMESTAMP NOT NULL,
 	durationInMinutes INT NOT NULL,
 	
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	deleted_at TIMESTAMP NULL
 );
 
 CREATE INDEX ON activities (activity_type_id);
