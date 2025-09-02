@@ -37,6 +37,9 @@ dependencies {
 	implementation 'org.flywaydb:flyway-core'
 	implementation 'org.flywaydb:flyway-database-postgresql'
 	runtimeOnly 'org.postgresql:postgresql'
+
+	// Minio
+	implementation 'io.minio:minio:8.5.17'
 }
 
 tasks.named('test') {
