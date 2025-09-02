@@ -37,8 +37,9 @@ services:
       SPRING_DATASOURCE_USERNAME: app
       SPRING_DATASOURCE_PASSWORD: app
       MINIO_ENDPOINT: http://minio:9000
-      MINIO_ACCESS_KEY: ${MINIO_ROOT_USER}
-      MINIO_SECRET_KEY: ${MINIO_ROOT_PASSWORD}
+      MINIO_PUBLIC_ENDPOINT: http://localhost:9000
+      MINIO_ACCESS_KEY: ${MINIO_ROOT_USER:-kopi}
+      MINIO_SECRET_KEY: ${MINIO_ROOT_PASSWORD:-passwordkopi}
       MINIO_BUCKET: uploads
       MINIO_REGION: us-east-1
       MINIO_SECURE: "false"
