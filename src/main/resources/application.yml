@@ -3,7 +3,8 @@ spring:
     name: fitbyte
 
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://db:5432/appdb}
+#    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://db:5432/appdb}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://172.31.74.166:5432/appdb}
     username: ${SPRING_DATASOURCE_USERNAME:app}
     password: ${SPRING_DATASOURCE_PASSWORD:app}
     driver-class-name: org.postgresql.Driver
@@ -26,6 +27,9 @@ spring:
 
 server:
   port: 8080
+
+jwt:
+  secret: ${JWT_SECRET:Uzl3YSBoYXZlIGEgc2VjcmV0IGtleSB0aGF0IGlzIHZlcnkgbG9uZyBhbmQgc2VjdXJl}
 
 logging:
   level:
