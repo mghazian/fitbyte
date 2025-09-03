@@ -23,10 +23,8 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
-    private final ValidationServiceImpl validationServiceImpl;
 
     public UserAuthResponse register(UserAuthRequest request) {
-        validationServiceImpl.validate(request);
 
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email is already in use");
@@ -45,8 +43,6 @@ public class AuthServiceImpl implements AuthService {
     }
 
     public UserAuthResponse login(UserAuthRequest request) {
-        validationServiceImpl.validate(request);
-
         String dummyHash = "$2a$10$7EqJtq98hPqEX7fNZaFWoOhi5Lvu8U8yIDzW2zQ5J8U1R13n3yNZa";
 
         Optional<User> user = userRepository.findByEmail(request.getEmail());
@@ -54,7 +50,7 @@ public class AuthServiceImpl implements AuthService {
         boolean passwordMatches = passwordEncoder.matches(request.getPassword(), passwordToCheck);
 
         if (user.isEmpty() || !passwordMatches) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email or password");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid email or password");
         }
         String token = jwtUtil.generateToken(user.get().getEmail());
         return new UserAuthResponse(user.get().getEmail(), token);
