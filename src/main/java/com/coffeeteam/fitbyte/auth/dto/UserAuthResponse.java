@@ -1,4 +1,4 @@
-package com.coffeeteam.fitbyte.dto;
+package com.coffeeteam.fitbyte.auth.dto;
 
 import lombok.Data;
 

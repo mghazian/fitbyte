@@ -1,18 +1,17 @@
-package com.coffeeteam.fitbyte.service;
+package com.coffeeteam.fitbyte.auth.service;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
 @Service
-public class ValidationService {
+public class ValidationServiceImpl implements ValidatorService {
 
     private final Validator validator;
-    public ValidationService(Validator validator) {
+    public ValidationServiceImpl(Validator validator) {
         this.validator = validator;
     }
 

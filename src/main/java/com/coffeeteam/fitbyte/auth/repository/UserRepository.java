@@ -1,6 +1,6 @@
-package com.coffeeteam.fitbyte.repository;
+package com.coffeeteam.fitbyte.auth.repository;
 
-import com.coffeeteam.fitbyte.entity.User;
+import com.coffeeteam.fitbyte.auth.entity.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.jpa.repository.JpaRepository;

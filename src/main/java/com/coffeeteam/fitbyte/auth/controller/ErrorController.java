@@ -1,6 +1,6 @@
-package com.coffeeteam.fitbyte.controller;
+package com.coffeeteam.fitbyte.auth.controller;
 
-import com.coffeeteam.fitbyte.dto.ErrorResponse;
+import com.coffeeteam.fitbyte.auth.dto.ErrorResponse;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

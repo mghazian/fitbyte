@@ -1,17 +1,16 @@
-package com.coffeeteam.fitbyte.security;
+package com.coffeeteam.fitbyte.auth.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.Date;
 
-@Slf4j
 @Component
 public class JwtUtil {
     @Value("${jwt.secret}")
@@ -22,10 +21,16 @@ public class JwtUtil {
     }
 
     public String generateToken(String email) {
+        long currentTimeMillis = System.currentTimeMillis();
+        long tokenValidityMs = Duration.ofHours(7).toMillis();
+
+        Date issuedAt = new Date(currentTimeMillis);
+        Date expiration = new Date(currentTimeMillis + tokenValidityMs);
+
         return Jwts.builder()
                 .subject(email)
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
+                .issuedAt(issuedAt)
+                .expiration(expiration)
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -42,11 +47,8 @@ public class JwtUtil {
     public boolean validateToken(String token, UserDetails userDetails) {
         try {
             final String username = extractUsername(token);
-            log.info("Extracted from token: {}", username);
-            log.info("UserDetails username: {}", userDetails.getUsername());
             return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
         } catch (JwtException e) {
-            log.error("JWT validation error: {}", e.getMessage());
             return false;
         }
     }
