@@ -14,7 +14,7 @@ services:
     build: { context: . }
     container_name: app_backend
     working_dir: /app
-    command: sh -c "chmod +x ./gradlew && ./gradlew bootRun --no-daemon"
+    command: sh -lc "sh ./gradlew bootRun --no-daemon"
     volumes:
       - ./:/app
     environment:
