@@ -13,10 +13,9 @@ public class FileController {
 
     private final FileService fileService;
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<FileResponse> uploadFile(@RequestPart("file")MultipartFile file){
-        var response = fileService.upload(file);
-        return ResponseEntity.ok(response);
+    @PostMapping
+    public ResponseEntity<FileResponse> upload(
+            @RequestPart("file") MultipartFile file) {
+        return ResponseEntity.ok(fileService.upload(file));
     }
-
 }
