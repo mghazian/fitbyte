@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.math.BigInteger;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "users")
@@ -41,11 +40,11 @@ public class User {
     @Pattern(regexp = "CARDIO|WEIGHT", message = "Preference must be CARDIO or WEIGHT")
     private String preference;
 
-    @Column(name = "weightunit")
+    @Column(name = "weigh_tunit")
     @Pattern(regexp = "KG|LBS", message = "Weight unit must be KG or LBS")
     private String weightUnit;
 
-    @Column(name = "heightunit")
+    @Column(name = "heigh_tunit")
     @Pattern(regexp = "CM|INCH", message = "Height unit must be CM or INCH")
     private String heightUnit;
 
@@ -59,17 +58,17 @@ public class User {
     @Max(value = 250, message = "Height must not exceed 250")
     private Integer height;
 
-    @Column(name = "imageuri")
+    @Column(name = "image_uri")
     private String imageUri;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private ZonedDateTime createdAt;
 
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
+    private ZonedDateTime updatedAt;
 
     @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
+    private ZonedDateTime deletedAt;
 }
