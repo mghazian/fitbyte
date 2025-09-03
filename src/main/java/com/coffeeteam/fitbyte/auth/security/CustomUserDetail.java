@@ -1,6 +1,6 @@
 package com.coffeeteam.fitbyte.auth.security;
 
-import com.coffeeteam.fitbyte.auth.entity.User;
+import com.coffeeteam.fitbyte.core.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

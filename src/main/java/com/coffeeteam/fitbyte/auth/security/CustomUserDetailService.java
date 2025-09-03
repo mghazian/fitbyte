@@ -1,7 +1,7 @@
 package com.coffeeteam.fitbyte.auth.security;
 
-import com.coffeeteam.fitbyte.auth.entity.User;
-import com.coffeeteam.fitbyte.auth.repository.UserRepository;
+import com.coffeeteam.fitbyte.core.entity.User;
+import com.coffeeteam.fitbyte.core.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
