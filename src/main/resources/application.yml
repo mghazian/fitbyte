@@ -3,7 +3,7 @@ spring:
     name: fitbyte
 
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://db:5432/appdb}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/appdb}
     username: ${SPRING_DATASOURCE_USERNAME:app}
     password: ${SPRING_DATASOURCE_PASSWORD:app}
     driver-class-name: org.postgresql.Driver
