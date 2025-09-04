@@ -13,6 +13,7 @@ services:
   app:
     build: { context: . }
     container_name: app_backend
+    user : root
     working_dir: /app
     user: 0:0
     command: sh -c "chmod +x ./gradlew && ./gradlew bootRun --no-daemon"
