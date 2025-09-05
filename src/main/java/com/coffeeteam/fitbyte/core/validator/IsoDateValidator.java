@@ -3,14 +3,15 @@ package com.coffeeteam.fitbyte.core.validator;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import java.time.format.DateTimeParseException;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 public class IsoDateValidator implements ConstraintValidator<IsoDate, String> {
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        if (value == null || value.isEmpty()) return true; // Use @NotEmpty for null/empty
+        if (value == null) return true; // Use @NotEmpty for null/empty
+        if (value.isEmpty()) return false;
         try {
-            LocalDateTime.parse(value); // Adjust if you want ZonedDateTime or OffsetDateTime
+            OffsetDateTime.parse(value); // Adjust if you want ZonedDateTime or OffsetDateTime
             return true;
         } catch (DateTimeParseException e) {
             return false;

@@ -4,10 +4,12 @@ import com.coffeeteam.fitbyte.core.validator.IsoDate;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 public class ActivityCreateRequestBody {
 
     @NotEmpty()
+    @NotNull
     private String activityType;
 
     @NotEmpty()

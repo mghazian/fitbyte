@@ -1,6 +1,6 @@
-package com.coffeeteam.fitbyte.activity;
+package com.coffeeteam.fitbyte.activity.service;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
@@ -9,7 +9,12 @@ import org.springframework.stereotype.Service;
 
 import com.coffeeteam.fitbyte.activity.dto.ActivityPersistResponse;
 import com.coffeeteam.fitbyte.activity.dto.ActivityUpdateRequestBody;
+import com.coffeeteam.fitbyte.activity.exceptions.ActivityNotFoundException;
 import com.coffeeteam.fitbyte.activity.exceptions.ActivityTypeNotFoundException;
+import com.coffeeteam.fitbyte.activity.Activity;
+import com.coffeeteam.fitbyte.activity.ActivityRepository;
+import com.coffeeteam.fitbyte.activity.ActivityType;
+import com.coffeeteam.fitbyte.activity.ActivityTypeRepository;
 import com.coffeeteam.fitbyte.activity.dto.ActivityCreateRequestBody;
 import com.coffeeteam.fitbyte.activity.dto.ActivityGetResponse;
 
@@ -38,7 +43,7 @@ public class ActivityService {
     ) throws ActivityTypeNotFoundException {
         ActivityType correspondingType = activityTypeRepository.findByName(activityRequestBody.getActivityType()).orElseThrow(() -> new ActivityTypeNotFoundException());
         int caloriesBurned = correspondingType.getCaloriesPerMinute() * activityRequestBody.getDurationInMinutes();
-        LocalDateTime doneAt = LocalDateTime.parse(activityRequestBody.getDoneAt());
+        OffsetDateTime doneAt = OffsetDateTime.parse(activityRequestBody.getDoneAt());
         
         Activity saved = activityRepository.save(new Activity(
             correspondingType,
@@ -46,14 +51,7 @@ public class ActivityService {
             activityRequestBody.getDurationInMinutes(),
             caloriesBurned
         ));
-        return new ActivityPersistResponse(
-            saved.toString(), 
-            saved.getActivityType().getName(), 
-            saved.getDoneAt().toString(), 
-            saved.getDurationInMinutes(), 
-            saved.getCaloriesBurned(),
-            saved.getCreatedAt().toString(), 
-            saved.getUpdatedAt().toString());
+        return mapToPersistResponse(saved);
     }
 
     public List<ActivityGetResponse> findActivities(
@@ -65,19 +63,19 @@ public class ActivityService {
         int caloriesBurnedMin,
         int caloriesBurnedMax
     ) {
-        LocalDateTime doneAtFrom = null;
+        OffsetDateTime doneAtFrom = null;
         if (doneAtFromString != null && !doneAtFromString.isEmpty()) {
             try {
-                doneAtFrom = LocalDateTime.parse(doneAtFromString);
+                doneAtFrom = OffsetDateTime.parse(doneAtFromString);
             } catch (DateTimeParseException e) {
                 doneAtFrom = null;
             }
         }
 
-        LocalDateTime doneAtTo = null;
+        OffsetDateTime doneAtTo = null;
         if (doneAtToString != null && !doneAtToString.isEmpty()) {
             try {
-                doneAtTo = LocalDateTime.parse(doneAtToString);
+                doneAtTo = OffsetDateTime.parse(doneAtToString);
             } catch (DateTimeParseException e) {
                 doneAtTo = null;
             }
@@ -127,29 +125,34 @@ public class ActivityService {
         return result.stream().map(this::mapToGetResponse).toList();
     }
 
-    public ActivityPersistResponse update(Long activityId, ActivityUpdateRequestBody activityRequestBody) {
+    public ActivityPersistResponse update(Long activityId, ActivityUpdateRequestBody activityRequestBody) throws ActivityNotFoundException, ActivityTypeNotFoundException {
         int counter = 0;
-        Activity savedActivity = activityRepository.findById(activityId).orElseThrow(() -> new EntityNotFoundException("activityId is not found"));
+        Activity savedActivity = activityRepository.findById(activityId).orElseThrow(() -> new ActivityNotFoundException());
 
         ActivityType correspondingType = savedActivity.getActivityType();
         if (
             activityRequestBody.getActivityType() != null && 
             !activityRequestBody.getActivityType().isEmpty() &&
             !savedActivity.getActivityType().getName().equals(activityRequestBody.getActivityType())) {
-            correspondingType = activityTypeRepository.findByName(activityRequestBody.getActivityType()).orElseThrow(() -> new EntityNotFoundException());
+            correspondingType = activityTypeRepository.findByName(activityRequestBody.getActivityType()).orElseThrow(() -> new ActivityTypeNotFoundException());
             savedActivity.setActivityType(correspondingType);
             counter++;
         }
         
-        if (activityRequestBody.getDoneAt() != null && !activityRequestBody.getDoneAt().isEmpty()) {
-            LocalDateTime doneAt = LocalDateTime.parse(activityRequestBody.getDoneAt());
-            savedActivity.setDoneAt(doneAt);
-            counter++;
+        if (activityRequestBody.getDoneAt() != null) {
+            OffsetDateTime doneAtFrom = null;
+            try {
+                doneAtFrom = OffsetDateTime.parse(activityRequestBody.getDoneAt());
+                savedActivity.setDoneAt(doneAtFrom);
+                counter++;
+            } catch (DateTimeParseException e) {
+                doneAtFrom = null;
+            }
         }
 
         int durationInMinutes = savedActivity.getDurationInMinutes();
-        if (activityRequestBody.getDurationInMinutes() != 0) {
-            durationInMinutes = correspondingType.getCaloriesPerMinute() * activityRequestBody.getDurationInMinutes();
+        if (activityRequestBody.getDurationInMinutes() != null) {
+            durationInMinutes = activityRequestBody.getDurationInMinutes();
             savedActivity.setDurationInMinutes(durationInMinutes);
             counter++;
         }
@@ -165,9 +168,9 @@ public class ActivityService {
         return mapToPersistResponse(savedActivity);
     }
 
-    public boolean delete(Long activityId) {
+    public boolean delete(Long activityId) throws ActivityNotFoundException {
         if (!activityRepository.existsById(activityId)) {
-            throw new EntityNotFoundException("activityId is not found");
+            throw new ActivityNotFoundException();
         }
         activityRepository.deleteById(activityId);
         return true;

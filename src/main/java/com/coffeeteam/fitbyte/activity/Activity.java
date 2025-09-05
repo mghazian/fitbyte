@@ -1,6 +1,6 @@
 package com.coffeeteam.fitbyte.activity;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,7 +28,7 @@ public class Activity {
     private ActivityType activityType;
 
     @Column(name = "doneat")
-    private LocalDateTime doneAt;
+    private OffsetDateTime doneAt;
 
     @Column(name = "durationinminutes")
     private int durationInMinutes;
@@ -36,10 +36,10 @@ public class Activity {
     @Column(name = "calories_burned")
     private int caloriesBurned;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private OffsetDateTime createdAt;
+    private OffsetDateTime updatedAt;
 
-    public Activity(ActivityType activityType, LocalDateTime doneAt, int durationInMinutes, int caloriesBurned) {
+    public Activity(ActivityType activityType, OffsetDateTime doneAt, int durationInMinutes, int caloriesBurned) {
         this.activityType = activityType;
         this.doneAt = doneAt;
         this.durationInMinutes = durationInMinutes;
@@ -48,7 +48,7 @@ public class Activity {
 
     public Activity setPatch(
         ActivityType activityType,
-        LocalDateTime doneAt,
+        OffsetDateTime doneAt,
         int durationInMinutes,
         int caloriesBurned
     ) {
@@ -65,10 +65,10 @@ public class Activity {
     public void setDurationInMinutes(int durationInMinutes) {
         this.durationInMinutes = durationInMinutes;
     }
-    public LocalDateTime getDoneAt() {
+    public OffsetDateTime getDoneAt() {
         return doneAt;
     }
-    public void setDoneAt(LocalDateTime doneAt) {
+    public void setDoneAt(OffsetDateTime doneAt) {
         this.doneAt = doneAt;
     }
     public ActivityType getActivityType() {
@@ -90,29 +90,29 @@ public class Activity {
         this.caloriesBurned = caloriesBurned;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public OffsetDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(OffsetDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getUpdatedAt() {
+    public OffsetDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
+    public void setUpdatedAt(OffsetDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
     @PrePersist
     protected void onCreate() {
-        createdAt = updatedAt = LocalDateTime.now();
+        createdAt = updatedAt = OffsetDateTime.now();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
+        updatedAt = OffsetDateTime.now();
     }
 }
