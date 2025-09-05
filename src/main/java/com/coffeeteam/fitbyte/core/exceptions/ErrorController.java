@@ -1,7 +1,6 @@
 package com.coffeeteam.fitbyte.core.exceptions;
 
 import com.coffeeteam.fitbyte.auth.dto.ErrorResponse;
-import com.coffeeteam.fitbyte.profileManagement.exception.ResourceNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.UnexpectedTypeException;
 import org.springframework.http.HttpStatus;
@@ -14,8 +13,10 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Map;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -54,6 +55,28 @@ public class ErrorController {
     public ResponseEntity<ErrorResponse> handleInvalidJson(HttpMessageNotReadableException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse("Invalid request payload: " + ex.getMostSpecificCause().getMessage()));
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<?> handleIllegalArgument(IllegalArgumentException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Map.of(
+                        "status", 400,
+                        "error", "Bad Request",
+                        "message", ex.getMessage()
+                ));
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<?> handleMaxSize(MaxUploadSizeExceededException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Map.of(
+                        "status", 400,
+                        "error", "Bad Request",
+                        "message", "File size exceeds the allowed limit"
+                ));
     }
 
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
