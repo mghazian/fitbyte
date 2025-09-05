@@ -22,6 +22,7 @@ public class Activity {
 
     private LocalDateTime doneAt;
     private int durationInMinutes;
+    private int caloriesBurned;
     
     public int getDurationInMinutes() {
         return durationInMinutes;
@@ -41,5 +42,18 @@ public class Activity {
     public void setActivityType(ActivityType activityType) {
         this.activityType = activityType;
     }
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+    public int getCaloriesBurned() {
+        return caloriesBurned;
+    }
+    public void setCaloriesBurned(int caloriesBurned) {
+        this.caloriesBurned = caloriesBurned;
+    }
+    
     
 }
