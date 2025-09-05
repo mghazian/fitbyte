@@ -1,6 +1,8 @@
 package com.coffeeteam.fitbyte.file;
 
 import com.coffeeteam.fitbyte.storage.ObjectStorageService;
+import com.coffeeteam.fitbyte.core.service.UserService;
+import com.coffeeteam.fitbyte.core.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +20,7 @@ import java.util.Set;
 public class FileService {
 
     private final ObjectStorageService storage;
+    private final UserService userService;
 
     @Value("${file.upload.max-size-kb:100}")
     private long maxFileSizeKb;
@@ -31,21 +34,28 @@ public class FileService {
     private static final Set<String> SUPPORTED_EXTENSIONS = Set.of(".jpg", ".jpeg", ".png");
     private static final String OCTET_STREAM = "application/octet-stream";
 
-    public FileResponse upload(MultipartFile file) {
-        log.info("Starting file upload process for file: {}",
-                file != null ? file.getOriginalFilename() : "null");
-
+    public FileResponse upload(MultipartFile file, Long userId) {
         validateFile(file);
         String contentType = determineContentType(file);
         validateContentType(contentType);
 
         try {
+            User user = userService.getByIdOrThrow(userId);
+            String oldImageUri = user.getImageUri();
+
+            if (oldImageUri != null && !oldImageUri.trim().isEmpty()) {
+                try {
+                    storage.delete(oldImageUri);
+                } catch (Exception e) {
+                    log.error("Error delete image: {}", oldImageUri);
+                }
+            }
+
             var result = storage.upload(file, uploadPath);
-            log.info("Successfully uploaded file: {} to path: {}",
-                    file.getOriginalFilename(), uploadPath);
+            userService.updateImageKeyById(userId, result.objectName());
+
             return new FileResponse(result.presignedUrl());
         } catch (Exception e) {
-            log.error("Failed to upload file: {}", file.getOriginalFilename(), e);
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR,
                     "File upload failed"

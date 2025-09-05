@@ -7,6 +7,7 @@ import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
 import io.minio.ObjectWriteResponse;
 import io.minio.PutObjectArgs;
+import io.minio.RemoveObjectArgs;
 import io.minio.http.Method;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -98,6 +99,19 @@ public class ObjectStorageService {
             );
         } catch (Exception e) {
             throw new RuntimeException("Failed to presigned URL: " + e.getMessage(), e);
+        }
+    }
+
+    public void delete(String objectName) {
+        try {
+            minio.removeObject(
+                    RemoveObjectArgs.builder()
+                            .bucket(props.bucket())
+                            .object(objectName)
+                            .build()
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to delete object: " + e.getMessage(), e);
         }
     }
 }
