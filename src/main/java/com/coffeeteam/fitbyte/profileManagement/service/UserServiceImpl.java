@@ -15,7 +15,6 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    @Transactional()
     public UserResponseDto getUserByEmail(String email) {
         User user= userRepository.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("User Not Found"));
         return mapToResponseDto(user);
