@@ -1,8 +1,14 @@
 package com.coffeeteam.fitbyte.profileManagement.dto;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.validation.constraints.*;
 import lombok.Data;
-import org.hibernate.validator.constraints.URL;
+
+import java.io.IOException;
 
 @Data
 public class UserUpdateDto {
@@ -29,13 +35,12 @@ public class UserUpdateDto {
     @Max(value = 250, message = "Height must not exceed 250")
     private Integer height;
 
-    @NotBlank
+    @NotBlank(message = "Name is required")
     @Size(min = 2, max = 60, message = "Name must be between 2 and 60 characters")
-    @Pattern(regexp = "^(?!(true|false|yes|no|1|0)$).*",
-            message = "Name cannot be a boolean value")
-    @Pattern(regexp = "^[a-zA-Z\\s'.]+$",
-            message = "Nama hanya boleh mengandung huruf, spasi, apostrof, dan titik")
+    @Pattern(regexp = "^[a-zA-Z\\s'.]+$", message = "Name must contain only letters, spaces, apostrophes, and periods")
+    @JsonDeserialize(using = StringOnlyDeserializer.class)
     private String name;
+
 
 
     @NotNull
@@ -43,4 +48,23 @@ public class UserUpdateDto {
     @Pattern(regexp = "^(https?|ftp)://[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\\.([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?))*\\.[a-zA-Z]{2,}(:[0-9]{1,5})?(/.*)?$",
             message = "Must be a complete and valid URL with proper domain")
     private String imageUri;
+}
+
+
+class StringOnlyDeserializer extends JsonDeserializer<String> {
+
+    @Override
+    public String deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+        JsonNode node = p.getCodec().readTree(p);
+
+        if (node.isBoolean()) {
+            throw new IllegalArgumentException("Name must be a string value, not boolean");
+        }
+
+        if (!node.isTextual()) {
+            throw new IllegalArgumentException("Name must be a string value");
+        }
+
+        return node.asText();
+    }
 }
