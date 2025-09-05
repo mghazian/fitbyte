@@ -1,5 +1,6 @@
 package com.coffeeteam.fitbyte.auth.config;
 
+import com.coffeeteam.fitbyte.auth.security.CustomAuthenticationEntryPoint;
 import com.coffeeteam.fitbyte.auth.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -27,11 +28,13 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final UserDetailsService userDetailsService;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(customAuthenticationEntryPoint))
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/v1/register").permitAll()
                         .requestMatchers("/v1/login").permitAll()

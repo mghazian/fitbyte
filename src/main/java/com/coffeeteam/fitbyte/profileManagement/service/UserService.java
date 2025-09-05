@@ -5,6 +5,6 @@ import com.coffeeteam.fitbyte.profileManagement.dto.UserResponseDto;
 import com.coffeeteam.fitbyte.profileManagement.dto.UserUpdateDto;
 
 public interface UserService {
-    UserResponseDto getUserById(Long id);
-    UserResponseDto updateUser(Long id, UserUpdateDto updateDto);
+    UserResponseDto getUserByEmail(String email);
+    UserResponseDto updateUser(String email, UserUpdateDto updateDto);
 }

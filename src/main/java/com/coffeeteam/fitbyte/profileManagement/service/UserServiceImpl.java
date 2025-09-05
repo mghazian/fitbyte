@@ -16,17 +16,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional()
-    public UserResponseDto getUserById(Long id) {
-        System.out.println(id);
-        User user= userRepository.findByIdAndNotDeleted(id).orElseThrow(()-> new ResourceNotFoundException("User Not Found"));
+    public UserResponseDto getUserByEmail(String email) {
+        User user= userRepository.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("User Not Found"));
         return mapToResponseDto(user);
     }
 
     @Override
     @Transactional
-    public UserResponseDto updateUser(Long id, UserUpdateDto updateDto) {
-        User user = userRepository.findByIdAndNotDeleted(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+    public UserResponseDto updateUser(String email, UserUpdateDto updateDto) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
 
         // Update only non-null fields
         if (updateDto.getPreference() != null) {
