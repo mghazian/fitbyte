@@ -32,6 +32,9 @@ server:
     include-message: always
     include-binding-errors: never
 
+jwt:
+  secret: ${JWT_SECRET:Uzl3YSBoYXZlIGEgc2VjcmV0IGtleSB0aGF0IGlzIHZlcnkgbG9uZyBhbmQgc2VjdXJl}
+
 logging:
   level:
     org.flywaydb: INFO
