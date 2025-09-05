@@ -8,6 +8,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 
 @Entity
 public class Activity {
@@ -23,6 +25,29 @@ public class Activity {
     private LocalDateTime doneAt;
     private int durationInMinutes;
     private int caloriesBurned;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+    public Activity(ActivityType activityType, LocalDateTime doneAt, int durationInMinutes, int caloriesBurned) {
+        this.activityType = activityType;
+        this.doneAt = doneAt;
+        this.durationInMinutes = durationInMinutes;
+        this.caloriesBurned = caloriesBurned;
+    }
+
+    public Activity setPatch(
+        ActivityType activityType,
+        LocalDateTime doneAt,
+        int durationInMinutes,
+        int caloriesBurned
+    ) {
+        this.activityType = activityType;
+        this.doneAt = doneAt;
+        this.durationInMinutes = durationInMinutes;
+        this.caloriesBurned = caloriesBurned;
+        return this;
+    }
     
     public int getDurationInMinutes() {
         return durationInMinutes;
@@ -54,6 +79,30 @@ public class Activity {
     public void setCaloriesBurned(int caloriesBurned) {
         this.caloriesBurned = caloriesBurned;
     }
-    
-    
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 }

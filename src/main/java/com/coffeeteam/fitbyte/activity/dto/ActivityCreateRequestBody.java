@@ -1,27 +1,25 @@
-package com.coffeeteam.fitbyte.activity;
+package com.coffeeteam.fitbyte.activity.dto;
 
-public class ActivityResponse {
-    private Long activityId;
+import com.coffeeteam.fitbyte.core.validator.IsoDate;
+
+import jakarta.validation.constraints.NotEmpty;
+
+public class ActivityCreateRequestBody {
+
+    @NotEmpty()
     private String activityType;
+
+    @NotEmpty()
+    @IsoDate()
     private String doneAt;
-    private int durationInMinutes;
-    private String createdAt;
     
-    public ActivityResponse(Long activityId, String activityType, String doneAt, int durationInMinutes,
-            String createdAt) {
-        this.activityId = activityId;
+    @NotEmpty()
+    private int durationInMinutes;
+    
+    public ActivityCreateRequestBody(String activityType, String doneAt, int durationInMinutes) {
         this.activityType = activityType;
         this.doneAt = doneAt;
         this.durationInMinutes = durationInMinutes;
-        this.createdAt = createdAt;
-    }
-
-    public Long getActivityId() {
-        return activityId;
-    }
-
-    public void setActivityId(Long activityId) {
-        this.activityId = activityId;
     }
 
     public String getActivityType() {
@@ -48,12 +46,6 @@ public class ActivityResponse {
         this.durationInMinutes = durationInMinutes;
     }
 
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
-
+    
+    
 }
