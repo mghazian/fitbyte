@@ -47,13 +47,11 @@ services:
       - minio
     volumes:
       - ./:/app:Z
-      - gradle_project:/app/.gradle
-      - gradle_user:/tmp/gradle
-      - gradle_build:/app/build
+      - gradle_project:/app/.gradle:Z
+      - gradle_cache:/tmp/gradle:Z
 
 volumes:
   db_data:
   minio_data:
   gradle_project:
-  gradle_user:
-  gradle_build:
+  gradle_cache:

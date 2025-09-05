@@ -1,8 +1,9 @@
 package com.coffeeteam.fitbyte.file;
 
+import com.coffeeteam.fitbyte.auth.security.CustomUserDetail;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,7 +16,9 @@ public class FileController {
 
     @PostMapping
     public ResponseEntity<FileResponse> upload(
-            @RequestPart("file") MultipartFile file) {
-        return ResponseEntity.ok(fileService.upload(file));
+            @RequestPart("file") MultipartFile file,
+            @AuthenticationPrincipal CustomUserDetail userDetail
+            ) {
+        return ResponseEntity.ok(fileService.upload(file, userDetail.user().getId()));
     }
 }
