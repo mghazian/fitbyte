@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.coffeeteam.fitbyte.activity.dto.ActivityPersistResponse;
 import com.coffeeteam.fitbyte.activity.dto.ActivityUpdateRequestBody;
+import com.coffeeteam.fitbyte.activity.exceptions.ActivityTypeNotFoundException;
 import com.coffeeteam.fitbyte.activity.dto.ActivityCreateRequestBody;
 import com.coffeeteam.fitbyte.activity.dto.ActivityGetResponse;
 
@@ -34,8 +35,8 @@ public class ActivityService {
 
     public ActivityPersistResponse createActivity(
         ActivityCreateRequestBody activityRequestBody
-    ) {
-        ActivityType correspondingType = activityTypeRepository.findByName(activityRequestBody.getActivityType()).orElseThrow(() -> new EntityNotFoundException());
+    ) throws ActivityTypeNotFoundException {
+        ActivityType correspondingType = activityTypeRepository.findByName(activityRequestBody.getActivityType()).orElseThrow(() -> new ActivityTypeNotFoundException());
         int caloriesBurned = correspondingType.getCaloriesPerMinute() * activityRequestBody.getDurationInMinutes();
         LocalDateTime doneAt = LocalDateTime.parse(activityRequestBody.getDoneAt());
         

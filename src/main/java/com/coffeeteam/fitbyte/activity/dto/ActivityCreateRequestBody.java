@@ -2,6 +2,7 @@ package com.coffeeteam.fitbyte.activity.dto;
 
 import com.coffeeteam.fitbyte.core.validator.IsoDate;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 
 public class ActivityCreateRequestBody {
@@ -13,7 +14,7 @@ public class ActivityCreateRequestBody {
     @IsoDate()
     private String doneAt;
     
-    @NotEmpty()
+    @Min(1)
     private int durationInMinutes;
     
     public ActivityCreateRequestBody(String activityType, String doneAt, int durationInMinutes) {

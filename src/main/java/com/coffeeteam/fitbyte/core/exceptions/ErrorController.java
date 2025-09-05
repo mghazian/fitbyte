@@ -1,6 +1,9 @@
 package com.coffeeteam.fitbyte.core.exceptions;
 
+import com.coffeeteam.fitbyte.activity.exceptions.ActivityTypeNotFoundException;
 import com.coffeeteam.fitbyte.auth.dto.ErrorResponse;
+
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,5 +42,11 @@ public class ErrorController {
     public ResponseEntity<ErrorResponse> handleInvalidJson(HttpMessageNotReadableException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse("Invalid request payload: " + ex.getMostSpecificCause().getMessage()));
+    }
+
+    @ExceptionHandler(ActivityTypeNotFoundException.class)
+    public ResponseEntity<ErrorResponse> activityTypeNotFound(ActivityTypeNotFoundException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(exception.getMessage()));
     }
 }

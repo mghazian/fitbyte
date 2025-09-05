@@ -2,6 +2,7 @@ package com.coffeeteam.fitbyte.activity;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,8 +11,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Table;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "activities")
+@NoArgsConstructor
 public class Activity {
 
     @Id
@@ -22,8 +27,13 @@ public class Activity {
     @JoinColumn(name = "activity_type_id")
     private ActivityType activityType;
 
+    @Column(name = "doneat")
     private LocalDateTime doneAt;
+
+    @Column(name = "durationinminutes")
     private int durationInMinutes;
+
+    @Column(name = "calories_burned")
     private int caloriesBurned;
 
     private LocalDateTime createdAt;

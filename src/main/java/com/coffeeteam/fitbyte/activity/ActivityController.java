@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.coffeeteam.fitbyte.activity.dto.ActivityGetResponse;
 import com.coffeeteam.fitbyte.activity.dto.ActivityPersistResponse;
 import com.coffeeteam.fitbyte.activity.dto.ActivityUpdateRequestBody;
+import com.coffeeteam.fitbyte.activity.exceptions.ActivityTypeNotFoundException;
 
 import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
@@ -32,7 +33,7 @@ public class ActivityController {
     private ActivityService activityService;
 
     @PostMapping("/activity")
-    public ResponseEntity<ActivityPersistResponse> create(@Valid @RequestBody ActivityCreateRequestBody requestBody) {
+    public ResponseEntity<ActivityPersistResponse> create(@Valid @RequestBody ActivityCreateRequestBody requestBody) throws ActivityTypeNotFoundException {
         ActivityPersistResponse result = activityService.createActivity(requestBody);
         
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
