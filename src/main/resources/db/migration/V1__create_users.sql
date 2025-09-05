@@ -1,14 +1,14 @@
 CREATE TABLE IF NOT EXISTS users (
   id BIGSERIAL PRIMARY KEY,
-  "name" VARCHAR NOT NULL,
+  "name" VARCHAR NULL,
   email VARCHAR NOT NULL,
   "password" VARCHAR NOT NULL,
   preference VARCHAR NULL,
-  weightUnit VARCHAR NULL,
-  heightUnit VARCHAR NULL,
+  weight_unit VARCHAR NULL,
+  height_unit VARCHAR NULL,
   weight INT NULL,
   height INT NULL,
-  imageUri VARCHAR NULL,
+  image_uri VARCHAR NULL,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

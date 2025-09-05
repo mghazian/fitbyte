@@ -8,6 +8,6 @@ class FitbyteApplicationTests {
 
 	@Test
 	void contextLoads() {
-	}
+    }
 
 }

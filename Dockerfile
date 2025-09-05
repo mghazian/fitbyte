@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21-jdk-alpine
+FROM public.ecr.aws/docker/library/eclipse-temurin:21-jdk-alpine
 WORKDIR /app
 
 RUN addgroup -S spring && adduser -S spring -G spring
