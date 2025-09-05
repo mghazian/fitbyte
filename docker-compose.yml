@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:16-alpine
+    image: public.ecr.aws/docker/library/postgres:16-alpine
     container_name: app_db
     environment:
       POSTGRES_USER: app
@@ -14,7 +14,9 @@ services:
     build: { context: . }
     user: root
     container_name: app_backend
+    user : root
     working_dir: /app
+    user: 0:0
     command: sh -c "chmod +x ./gradlew && ./gradlew bootRun --no-daemon"
     volumes:
       - ./:/app
