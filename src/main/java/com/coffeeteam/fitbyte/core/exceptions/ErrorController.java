@@ -9,6 +9,7 @@ import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -45,6 +46,12 @@ public class ErrorController {
                 .body(new ErrorResponse("Invalid request payload: " + ex.getMostSpecificCause().getMessage()));
     }
 
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidType(HttpMediaTypeNotSupportedException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse("Invalid request payload: " + ex.getMessage()));
+    }
+
     @ExceptionHandler(ActivityTypeNotFoundException.class)
     public ResponseEntity<ErrorResponse> activityTypeNotFound(ActivityTypeNotFoundException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -60,6 +67,15 @@ public class ErrorController {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleInvalidArgument(IllegalArgumentException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleInternalServerError(Exception ex) {
+        System.out.println("500 Internal Server Error: " + ex.toString());
+        // Optionally log stack trace: ex.printStackTrace();
+        ex.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ErrorResponse(ex.getMessage()));
     }
 }

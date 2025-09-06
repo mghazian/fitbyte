@@ -8,8 +8,8 @@ import java.time.OffsetDateTime;
 public class IsoDateValidator implements ConstraintValidator<IsoDate, String> {
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        if (value == null) return true; // Use @NotEmpty for null/empty
-        if (value.isEmpty()) return false;
+        if (value == null) return true;
+        if (value.isEmpty() || value == null) return false;
         try {
             OffsetDateTime.parse(value); // Adjust if you want ZonedDateTime or OffsetDateTime
             return true;
