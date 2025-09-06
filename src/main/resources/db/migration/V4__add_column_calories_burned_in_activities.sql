@@ -1,0 +1,1 @@
+ALTER TABLE activities ADD COLUMN calories_burned INT NOT NULL;
