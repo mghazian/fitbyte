@@ -24,6 +24,15 @@ spring:
     clean-disabled: true
     baseline-on-migrate: true
 
+  minio:
+    endpoint: ${MINIO_ENDPOINT}
+    accessKey: ${MINIO_ACCESS_KEY}
+    secretKey: ${MINIO_SECRET_KEY}
+    bucket: ${MINIO_BUCKET}
+    region: ${MINIO_REGION}
+    secure: ${MINIO_SECURE}
+    presign-expiry-seconds: ${MINIO_PRESIGN_EXPIRY_SECONDS}
+
 server:
   port: 8080
 
