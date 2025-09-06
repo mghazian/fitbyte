@@ -2,6 +2,7 @@ package com.coffeeteam.fitbyte.activity.service;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,15 +12,14 @@ import com.coffeeteam.fitbyte.activity.dto.ActivityPersistResponse;
 import com.coffeeteam.fitbyte.activity.dto.ActivityUpdateRequestBody;
 import com.coffeeteam.fitbyte.activity.exceptions.ActivityNotFoundException;
 import com.coffeeteam.fitbyte.activity.exceptions.ActivityTypeNotFoundException;
-import com.coffeeteam.fitbyte.activity.Activity;
-import com.coffeeteam.fitbyte.activity.ActivityRepository;
-import com.coffeeteam.fitbyte.activity.ActivityType;
-import com.coffeeteam.fitbyte.activity.ActivityTypeRepository;
+import com.coffeeteam.fitbyte.activity.repository.ActivityRepository;
+import com.coffeeteam.fitbyte.activitytype.repository.ActivityTypeRepository;
+import com.coffeeteam.fitbyte.core.entity.Activity;
+import com.coffeeteam.fitbyte.core.entity.ActivityType;
 import com.coffeeteam.fitbyte.activity.dto.ActivityCreateRequestBody;
 import com.coffeeteam.fitbyte.activity.dto.ActivityGetResponse;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Join;
@@ -72,6 +72,9 @@ public class ActivityService {
             }
         }
 
+        ActivityType correspondingType = activityTypeRepository.findByName(activityType).orElse(null);
+        if (correspondingType == null && !activityType.isEmpty()) return new ArrayList<>();
+
         OffsetDateTime doneAtTo = null;
         if (doneAtToString != null && !doneAtToString.isEmpty()) {
             try {
@@ -89,8 +92,8 @@ public class ActivityService {
 
         Predicate predicate = cb.conjunction();
 
-        if (activityType != null && !activityType.isEmpty()) {
-            predicate = cb.and(predicate, cb.equal(activityTypeJoin.get("name"), activityType));
+        if (correspondingType != null) {
+            predicate = cb.and(predicate, cb.equal(activityTypeJoin.get("Id"), correspondingType.getId()));
         }
 
         if (doneAtFrom != null) {
@@ -102,17 +105,11 @@ public class ActivityService {
         }
 
         if (caloriesBurnedMin != -1) {
-            Predicate caloriesBurnedMinPredicate = cb.greaterThanOrEqualTo(
-                cb.prod(root.get("durationInMinutes"), activityTypeJoin.get("caloriesPerMinute")), caloriesBurnedMin);
-            
-            predicate = cb.and(predicate, caloriesBurnedMinPredicate);
+            predicate = cb.and(predicate, cb.greaterThanOrEqualTo(root.get("caloriesBurned"), caloriesBurnedMin));
         }
 
         if (caloriesBurnedMax != -1) {
-            Predicate caloriesBurnedMaxPredicate = cb.lessThanOrEqualTo(
-                cb.prod(root.get("durationInMinutes"), activityTypeJoin.get("caloriesPerMinute")), caloriesBurnedMax);
-            
-            predicate = cb.and(predicate, caloriesBurnedMaxPredicate);
+            predicate = cb.and(predicate, cb.lessThanOrEqualTo(root.get("caloriesBurned"), caloriesBurnedMax));
         }
 
         query.where(predicate);

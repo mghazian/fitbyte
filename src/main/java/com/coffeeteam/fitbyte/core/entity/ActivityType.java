@@ -1,15 +1,19 @@
-package com.coffeeteam.fitbyte.activity;
+package com.coffeeteam.fitbyte.core.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "activity_types")
-@NoArgsConstructor
 public class ActivityType {
 
     @Id

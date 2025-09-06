@@ -86,13 +86,4 @@ public class ErrorController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(ex.getMessage()));
     }
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleInternalServerError(Exception ex) {
-        System.out.println("500 Internal Server Error: " + ex.toString());
-        // Optionally log stack trace: ex.printStackTrace();
-        ex.printStackTrace();
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ErrorResponse(ex.getMessage()));
-    }
 }

@@ -1,11 +1,17 @@
 package com.coffeeteam.fitbyte.activity.dto;
 
-import com.coffeeteam.fitbyte.core.validator.IsoDate;
+import com.coffeeteam.fitbyte.core.validator.isodate.IsoDate;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ActivityCreateRequestBody {
 
     @NotEmpty()
@@ -18,37 +24,4 @@ public class ActivityCreateRequestBody {
     
     @Min(1)
     private int durationInMinutes;
-    
-    public ActivityCreateRequestBody(String activityType, String doneAt, int durationInMinutes) {
-        this.activityType = activityType;
-        this.doneAt = doneAt;
-        this.durationInMinutes = durationInMinutes;
-    }
-
-    public String getActivityType() {
-        return activityType;
-    }
-
-    public void setActivityType(String activityType) {
-        this.activityType = activityType;
-    }
-
-    public String getDoneAt() {
-        return doneAt;
-    }
-
-    public void setDoneAt(String doneAt) {
-        this.doneAt = doneAt;
-    }
-
-    public int getDurationInMinutes() {
-        return durationInMinutes;
-    }
-
-    public void setDurationInMinutes(int durationInMinutes) {
-        this.durationInMinutes = durationInMinutes;
-    }
-
-    
-    
 }

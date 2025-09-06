@@ -1,4 +1,4 @@
-package com.coffeeteam.fitbyte.activity;
+package com.coffeeteam.fitbyte.activity.controller;
 
 import java.util.List;
 import java.util.Set;

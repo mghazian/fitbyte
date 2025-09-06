@@ -1,4 +1,4 @@
-package com.coffeeteam.fitbyte.core.validator;
+package com.coffeeteam.fitbyte.core.validator.isodate;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
