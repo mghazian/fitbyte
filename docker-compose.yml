@@ -23,8 +23,9 @@ services:
       - minio_data:/data:Z
 
   app:
-    build:
-      context: .
+    build: { context: . }
+    user: root
+    container_name: app_backend
     working_dir: /app
     command: sh -lc "sh ./gradlew bootRun --no-daemon"
     environment:

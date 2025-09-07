@@ -1,17 +1,16 @@
 package com.coffeeteam.fitbyte.core.exceptions;
 
+import com.coffeeteam.fitbyte.activity.exceptions.ActivityNotFoundException;
+import com.coffeeteam.fitbyte.activity.exceptions.ActivityTypeNotFoundException;
 import com.coffeeteam.fitbyte.auth.dto.ErrorResponse;
 import com.coffeeteam.fitbyte.profileManagement.exception.ResourceNotFoundException;
+
 import jakarta.validation.ConstraintViolationException;
-import jakarta.validation.UnexpectedTypeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.validation.FieldError;
-import org.springframework.web.HttpMediaTypeException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
@@ -92,5 +91,23 @@ public class ErrorController {
         errorResponse.put("message", "An unexpected error occurred");
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+    }
+
+    @ExceptionHandler(ActivityTypeNotFoundException.class)
+    public ResponseEntity<ErrorResponse> activityTypeNotFound(ActivityTypeNotFoundException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(exception.getMessage()));
+    }
+
+    @ExceptionHandler(ActivityNotFoundException.class)
+    public ResponseEntity<ErrorResponse> activityNotFound(ActivityNotFoundException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponse(exception.getMessage()));
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidArgument(IllegalArgumentException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(ex.getMessage()));
     }
 }
