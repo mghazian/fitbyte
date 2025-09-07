@@ -1,6 +1,7 @@
 package com.coffeeteam.fitbyte.core.exceptions;
 
 import com.coffeeteam.fitbyte.auth.dto.ErrorResponse;
+import com.coffeeteam.fitbyte.profileManagement.exception.ResourceNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.UnexpectedTypeException;
 import org.springframework.http.HttpStatus;
