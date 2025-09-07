@@ -90,7 +90,7 @@ public class ActivityController {
         try {
             requestBody = objectMapper.treeToValue(jsonNode, ActivityUpdateRequestBody.class);
         } catch (JsonProcessingException e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("invalid patch param");
         } catch (IllegalArgumentException e) {
             throw e;
         }
@@ -99,18 +99,13 @@ public class ActivityController {
         Set<ConstraintViolation<ActivityUpdateRequestBody>> violations = validator.validate(requestBody);
 
         if (!violations.isEmpty()) {
-            throw new IllegalArgumentException();
+            System.out.println(violations.toString());
+            throw new IllegalArgumentException("invalid patch param");
         }
 
         ActivityPersistResponse result = activityService.update(activityId, requestBody);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
-    }
-
-    @PatchMapping("/activity/")
-    public ResponseEntity<?> patchWithoutId() {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-            .body("Activity ID is required in the path.");
     }
 
     @DeleteMapping("/activity/{activityIdString}")
@@ -124,11 +119,5 @@ public class ActivityController {
         boolean result = activityService.delete(activityId);
         
         return ResponseEntity.status(HttpStatus.OK).body(result);
-    }
-
-    @DeleteMapping("/activity/")
-    public ResponseEntity<?> deleteWithoutId() {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-            .body("Activity ID is required in the path.");
     }
 }
