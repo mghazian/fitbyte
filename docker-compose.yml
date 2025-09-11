@@ -23,7 +23,7 @@ services:
       - minio_data:/data:Z
 
   app:
-    build: { context: . }
+    image: us-west1-docker.pkg.dev/projectsprint-000001/ps-docker-repo/kopi-team:e3dd200
     user: root
     container_name: app_backend
     working_dir: /app
